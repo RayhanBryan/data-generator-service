@@ -406,21 +406,21 @@ export default {
 
         const result = await dummyGeneratorService.generateDataFile(payload, requireSize, osType);
 
-        // Show success message
-        this.$nextTick(() => {
-          alert(
-            `Windows Data generation successful!\nFields: ${this.fields.length}\nFile: ${this.fileName}\nTable: ${this.tableName}\nFormat: ${this.fileFormat}`
+        // Log success result
+        if (result.filename) {
+          console.log(
+            `File downloaded successfully: ${result.filename} (${Math.round(
+              result.size / 1024
+            )} KB)`
           );
-        });
+        } else {
+          console.log("Windows Data generation successful");
+        }
 
         console.log("Generation result:", result);
       } catch (error) {
         console.error("Error generating Windows data:", error);
         this.apiError = `Failed to generate data: ${error.message}`;
-
-        this.$nextTick(() => {
-          alert(`Error generating data: ${error.message}`);
-        });
       } finally {
         this.loading = false;
       }
@@ -448,21 +448,21 @@ export default {
 
         const result = await dummyGeneratorService.generateDataFile(payload, requireSize, osType);
 
-        // Show success message
-        this.$nextTick(() => {
-          alert(
-            `Linux Data generation successful!\nFields: ${this.fields.length}\nFile: ${this.fileName}\nTable: ${this.tableName}\nFormat: ${this.fileFormat}`
+        // Log success result
+        if (result.filename) {
+          console.log(
+            `File downloaded successfully: ${result.filename} (${Math.round(
+              result.size / 1024
+            )} KB)`
           );
-        });
+        } else {
+          console.log("Linux Data generation successful");
+        }
 
         console.log("Generation result:", result);
       } catch (error) {
         console.error("Error generating Linux data:", error);
         this.apiError = `Failed to generate data: ${error.message}`;
-
-        this.$nextTick(() => {
-          alert(`Error generating data: ${error.message}`);
-        });
       } finally {
         this.loading = false;
       }

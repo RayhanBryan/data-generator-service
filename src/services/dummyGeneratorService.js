@@ -28,10 +28,52 @@ class DummyGeneratorService {
       });
 
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        const errorText = await response.text();
+        throw new Error(`HTTP error! status: ${response.status} - ${errorText}`);
       }
 
-      return await response.json();
+      // Check if response is a downloadable file
+      const contentType = response.headers.get("content-type");
+      const contentDisposition = response.headers.get("content-disposition");
+
+      if (contentDisposition && contentDisposition.includes("attachment")) {
+        // This is a file download
+        const blob = await response.blob();
+
+        // Extract filename from Content-Disposition header or use default
+        let filename = "generated_data.txt";
+        if (contentDisposition) {
+          const filenameMatch = contentDisposition.match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/);
+          if (filenameMatch && filenameMatch[1]) {
+            filename = filenameMatch[1].replace(/['"]/g, "");
+          }
+        }
+
+        // Create download link
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.style.display = "none";
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+
+        return {
+          success: true,
+          message: `File ${filename} downloaded successfully`,
+          filename: filename,
+          size: blob.size,
+        };
+      } else if (contentType && contentType.includes("application/json")) {
+        return await response.json();
+      } else {
+        // Return text if not JSON or file
+        const textResponse = await response.text();
+        console.log("Non-JSON response:", textResponse);
+        return { message: textResponse, success: true };
+      }
     } catch (error) {
       console.error("Error generating data file:", error);
       throw error;
@@ -52,10 +94,19 @@ class DummyGeneratorService {
       });
 
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        const errorText = await response.text();
+        throw new Error(`HTTP error! status: ${response.status} - ${errorText}`);
       }
 
-      return await response.json();
+      // Check if response is JSON
+      const contentType = response.headers.get("content-type");
+      if (contentType && contentType.includes("application/json")) {
+        return await response.json();
+      } else {
+        const textResponse = await response.text();
+        console.log("Non-JSON response:", textResponse);
+        return [];
+      }
     } catch (error) {
       console.error("Error fetching table data types:", error);
       throw error;
@@ -76,10 +127,19 @@ class DummyGeneratorService {
       });
 
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        const errorText = await response.text();
+        throw new Error(`HTTP error! status: ${response.status} - ${errorText}`);
       }
 
-      return await response.json();
+      // Check if response is JSON
+      const contentType = response.headers.get("content-type");
+      if (contentType && contentType.includes("application/json")) {
+        return await response.json();
+      } else {
+        const textResponse = await response.text();
+        console.log("Non-JSON response:", textResponse);
+        return [];
+      }
     } catch (error) {
       console.error("Error fetching random data types:", error);
       throw error;
