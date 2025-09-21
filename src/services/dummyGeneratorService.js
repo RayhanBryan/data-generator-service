@@ -6,11 +6,19 @@ class DummyGeneratorService {
   /**
    * Generate dummy data file
    * @param {Object} payload - Data generation parameters
+   * @param {number} requireSize - Required size parameter
+   * @param {string} osType - OS type (windows/linux)
    * @returns {Promise} API response
    */
-  async generateDataFile(payload) {
+  async generateDataFile(payload, requireSize = 0, osType = "windows") {
     try {
-      const response = await fetch(`${API_BASE_URL}/dummy/data/file/generator`, {
+      // Build query parameters
+      const queryParams = new URLSearchParams({
+        requireSize: requireSize.toString(),
+        osType: osType.toLowerCase(),
+      });
+
+      const response = await fetch(`${API_BASE_URL}/dummy/data/file/generator?${queryParams}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -45,7 +45,11 @@ export const testApiConnection = async () => {
       platform: "Windows",
     };
 
-    const result = await dummyGeneratorService.generateDataFile(samplePayload);
+    // Calculate parameters for API call
+    const requireSize = 1024 * 1024; // 1MB in bytes
+    const osType = "windows";
+
+    const result = await dummyGeneratorService.generateDataFile(samplePayload, requireSize, osType);
     console.log("✅ Generate Data Result:", result);
 
     console.log("🎉 All API tests passed!");

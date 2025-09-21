@@ -400,7 +400,11 @@ export default {
           platform: "Windows",
         });
 
-        const result = await dummyGeneratorService.generateDataFile(payload);
+        // Calculate requireSize and osType for API parameters
+        const requireSize = apiHelper.calculateRequireSize(this.size, this.sizeUnit);
+        const osType = apiHelper.getOsType("Windows");
+
+        const result = await dummyGeneratorService.generateDataFile(payload, requireSize, osType);
 
         // Show success message
         this.$nextTick(() => {
@@ -438,7 +442,11 @@ export default {
           platform: "Linux",
         });
 
-        const result = await dummyGeneratorService.generateDataFile(payload);
+        // Calculate requireSize and osType for API parameters
+        const requireSize = apiHelper.calculateRequireSize(this.size, this.sizeUnit);
+        const osType = apiHelper.getOsType("Linux");
+
+        const result = await dummyGeneratorService.generateDataFile(payload, requireSize, osType);
 
         // Show success message
         this.$nextTick(() => {

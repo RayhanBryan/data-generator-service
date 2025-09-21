@@ -77,4 +77,34 @@ export const apiHelper = {
       platform: formData.platform || "Windows",
     };
   },
+
+  /**
+   * Calculate requireSize based on size and unit
+   * @param {string|number} size - Size value
+   * @param {string} sizeUnit - Size unit (KB, MB, GB)
+   * @returns {number} Size in bytes
+   */
+  calculateRequireSize(size, sizeUnit) {
+    const sizeNum = parseFloat(size) || 0;
+
+    switch (sizeUnit?.toLowerCase()) {
+      case "kb":
+        return Math.round(sizeNum * 1024);
+      case "mb":
+        return Math.round(sizeNum * 1024 * 1024);
+      case "gb":
+        return Math.round(sizeNum * 1024 * 1024 * 1024);
+      default:
+        return Math.round(sizeNum);
+    }
+  },
+
+  /**
+   * Get OS type from platform
+   * @param {string} platform - Platform name (Windows/Linux)
+   * @returns {string} OS type for API
+   */
+  getOsType(platform) {
+    return platform?.toLowerCase() === "linux" ? "linux" : "windows";
+  },
 };
