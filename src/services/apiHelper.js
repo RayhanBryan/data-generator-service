@@ -55,26 +55,23 @@ export const apiHelper = {
   },
 
   /**
-   * Format payload for data generation
+   * Format payload for data generation according to API schema
    * @param {Object} formData - Form data from component
    * @returns {Object} Formatted payload
    */
   formatGeneratePayload(formData) {
     return {
-      fields: formData.fields.map((field) => ({
-        name: field.name,
-        dataType: field.dataType,
-        randomType: field.randomType || null,
-        attribute: field.attribute || null,
+      goOS: formData.platform?.toLowerCase() || "windows",
+      tableName: formData.tableName || "dummy_table",
+      totalRows: 0, // Based on API example
+      fileName: formData.fileName || "dummy-generator",
+      fileTypeDestination: formData.fileFormat?.toLowerCase() || "csv",
+      listColumnDetails: formData.fields.map((field) => ({
+        columnName: field.name || "",
+        columnDataType: field.dataType || "string",
+        randomType: field.randomType || "",
+        rangeFormatValue: field.attribute || "",
       })),
-      generateWith: formData.generateWith,
-      size: parseFloat(formData.size),
-      sizeUnit: formData.sizeUnit,
-      fileName: formData.fileName,
-      tableName: formData.tableName,
-      downloadAs: formData.downloadAs,
-      fileFormat: formData.fileFormat,
-      platform: formData.platform || "Windows",
     };
   },
 

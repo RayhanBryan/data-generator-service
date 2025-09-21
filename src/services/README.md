@@ -9,36 +9,58 @@ API service untuk Data Generator yang terhubung ke backend di `https://40.90.208
 ```
 src/services/
 ├── dummyGeneratorService.js    # Main API service
-├── apiHelper.js                # Helper utilities
-└── apiTest.js                  # Testing utilities
+└── apiHelper.js                # Helper utilities
 ```
 
 ## Available Endpoints
 
 ### 1. Generate Data File
 
-**POST** `/dummy/data/file/generator`
+**POST** `/dummy/data/file/generator?requireSize=1048576&osType=windows`
 
 **Payload:**
 
 ```javascript
 {
-  fields: [
+  "goOS": "windows",
+  "tableName": "string",
+  "totalRows": 0,
+  "fileName": "string",
+  "fileTypeDestination": "string",
+  "listColumnDetails": [
     {
-      name: "id",
-      dataType: "Int",
-      randomType: "Random Number",
-      attribute: "1-1000"
+      "columnName": "string",
+      "columnDataType": "string",
+      "randomType": "string",
+      "rangeFormatValue": "string"
     }
-  ],
-  generateWith: "Size",
-  size: 1.0,
-  sizeUnit: "MB",
-  fileName: "test-data",
-  tableName: "test_table",
-  downloadAs: "Script",
-  fileFormat: "CSV",
-  platform: "Windows"
+  ]
+}
+```
+
+**Example:**
+
+```javascript
+{
+  "goOS": "windows",
+  "tableName": "test_table",
+  "totalRows": 0,
+  "fileName": "test-data",
+  "fileTypeDestination": "csv",
+  "listColumnDetails": [
+    {
+      "columnName": "id",
+      "columnDataType": "Int",
+      "randomType": "Random Number",
+      "rangeFormatValue": "1-1000"
+    },
+    {
+      "columnName": "name",
+      "columnDataType": "Varchar",
+      "randomType": "Name",
+      "rangeFormatValue": ""
+    }
+  ]
 }
 ```
 
@@ -77,16 +99,6 @@ All API calls include comprehensive error handling:
 - HTTP status errors
 - JSON parsing errors
 - Custom ApiError class
-
-## Testing
-
-Use `apiTest.js` to test API connectivity:
-
-```javascript
-import { testApiConnection } from "../services/apiTest.js";
-
-const isConnected = await testApiConnection();
-```
 
 ## Notes
 
